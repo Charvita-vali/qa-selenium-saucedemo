@@ -27,11 +27,11 @@ class LoginPage:
         wait_for_clickable(self.driver, self.LOGIN_BUTTON).click()
 
         wait_for_url(self.driver, expected_url)
-    def login_without_url_wait(self, username, password):
-    wait_for_clickable(self.driver, self.USERNAME).send_keys(username)
-    wait_for_clickable(self.driver, self.PASSWORD).send_keys(password)
-    wait_for_clickable(self.driver, self.LOGIN_BUTTON).click()
 
+    def login_without_url_wait(self, username, password):
+        wait_for_clickable(self.driver, self.USERNAME).send_keys(username)
+        wait_for_clickable(self.driver, self.PASSWORD).send_keys(password)
+        wait_for_clickable(self.driver, self.LOGIN_BUTTON).click()
 
     def get_error_message(self):
         return wait_for_visible(
