@@ -28,3 +28,10 @@ jobs:
 
       - name: Run Selenium tests
         run: xvfb-run -a pytest
+        
+      - name: Upload failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: selenium-failure-diagnostics
+          path: test-results/
