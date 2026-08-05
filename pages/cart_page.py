@@ -1,15 +1,23 @@
 from selenium.webdriver.common.by import By
 
 from config import CART_URL, CHECKOUT_STEP_ONE_URL
-from utils.waits import safe_click, wait_for_url, wait_for_visible
+from utils.waits import (
+    wait_for_clickable,
+    wait_for_url,
+    wait_for_visible,
+)
 
 
 class CartPage:
 
-    CHECKOUT_BUTTON = (By.ID, "checkout")
+    CHECKOUT_BUTTON = (
+        By.CSS_SELECTOR,
+        "[data-test='checkout']",
+    )
     BACKPACK_ITEM = (
         By.XPATH,
-        "//div[@class='inventory_item_name' and text()='Sauce Labs Backpack']",
+        "//div[@data-test='inventory-item-name' "
+        "and normalize-space()='Sauce Labs Backpack']",
     )
 
     def __init__(self, driver):
@@ -28,10 +36,10 @@ class CartPage:
         ).is_displayed()
 
     def proceed_to_checkout(self):
-        safe_click(
+        wait_for_clickable(
             self.driver,
             self.CHECKOUT_BUTTON,
-        )
+        ).click()
 
         wait_for_url(
             self.driver,
