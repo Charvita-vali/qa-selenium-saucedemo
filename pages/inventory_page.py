@@ -50,31 +50,27 @@ class InventoryPage:
             self.driver,
             self.BACKPACK_ADD_BUTTON,
         )
-
         self.wait_for_cart_count("1")
 
     def add_bike_light(self):
         safe_click(
             self.driver,
-            self.BACKPACK_ADD_BUTTON,
+            self.BIKE_LIGHT_ADD_BUTTON,
         )
-
         self.wait_for_cart_count("2")
 
     def add_bolt_tshirt(self):
         safe_click(
             self.driver,
-            self.BACKPACK_ADD_BUTTON,
+            self.BOLT_TSHIRT_ADD_BUTTON,
         )
-
         self.wait_for_cart_count("3")
 
     def remove_backpack(self):
         safe_click(
             self.driver,
-            self.BACKPACK_ADD_BUTTON,
+            self.BACKPACK_REMOVE_BUTTON,
         )
-
         self.wait.until(
             EC.invisibility_of_element_located(
                 self.CART_BADGE
@@ -84,9 +80,8 @@ class InventoryPage:
     def open_cart(self):
         safe_click(
             self.driver,
-            self.BACKPACK_ADD_BUTTON,
+            self.CART_LINK,
         )
-
         self.wait.until(
             EC.url_to_be(CART_URL)
         )
