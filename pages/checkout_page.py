@@ -4,7 +4,7 @@ from config import (
     CHECKOUT_COMPLETE_URL,
     CHECKOUT_STEP_TWO_URL,
 )
-from utils.waits import wait_for_clickable, wait_for_url, wait_for_visible
+from utils.waits import safe_click, wait_for_url, wait_for_visible
 
 
 class CheckoutPage:
@@ -26,39 +26,46 @@ class CheckoutPage:
         last_name,
         postal_code,
     ):
-        wait_for_visible(
+        first_name_field = wait_for_visible(
             self.driver,
             self.FIRST_NAME,
-        ).send_keys(first_name)
+        )
+        first_name_field.clear()
+        first_name_field.send_keys(first_name)
 
-        wait_for_visible(
+        last_name_field = wait_for_visible(
             self.driver,
             self.LAST_NAME,
-        ).send_keys(last_name)
+        )
+        last_name_field.clear()
+        last_name_field.send_keys(last_name)
 
-        wait_for_visible(
+        postal_code_field = wait_for_visible(
             self.driver,
             self.POSTAL_CODE,
-        ).send_keys(postal_code)
+        )
+        postal_code_field.clear()
+        postal_code_field.send_keys(postal_code)
 
     def click_continue(self):
-        wait_for_clickable(
+        safe_click(
             self.driver,
             self.CONTINUE_BUTTON,
-        ).click()
+        )
 
     def continue_to_overview(self):
         self.click_continue()
+
         wait_for_url(
             self.driver,
             CHECKOUT_STEP_TWO_URL,
         )
 
     def finish_order(self):
-        wait_for_clickable(
+        safe_click(
             self.driver,
             self.FINISH_BUTTON,
-        ).click()
+        )
 
         wait_for_url(
             self.driver,
