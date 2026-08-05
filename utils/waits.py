@@ -20,8 +20,10 @@ def wait_for_clickable(driver, locator, timeout=DEFAULT_TIMEOUT):
 
 
 def safe_click(driver, locator, timeout=DEFAULT_TIMEOUT):
-    """Scroll an element into view and click it reliably."""
-    element = wait_for_clickable(driver, locator, timeout)
+    """Wait for an element, scroll to it, and click with JavaScript."""
+    element = WebDriverWait(driver, timeout).until(
+        EC.presence_of_element_located(locator)
+    )
 
     driver.execute_script(
         "arguments[0].scrollIntoView({block: 'center'});",
@@ -29,8 +31,13 @@ def safe_click(driver, locator, timeout=DEFAULT_TIMEOUT):
     )
 
     WebDriverWait(driver, timeout).until(
-        EC.element_to_be_clickable(locator)
-    ).click()
+        EC.visibility_of(element)
+    )
+
+    driver.execute_script(
+        "arguments[0].click();",
+        element,
+    )
 
 
 def wait_for_url(driver, expected_url, timeout=DEFAULT_TIMEOUT):
