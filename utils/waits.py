@@ -29,17 +29,10 @@ def wait_for_invisible(driver, locator, timeout=DEFAULT_TIMEOUT):
 def wait_for_text(driver, locator, text, timeout=DEFAULT_TIMEOUT):
     """Wait until an element contains the expected text."""
     return WebDriverWait(driver, timeout).until(
-        EC.text_to_be_present_in_element(locator, str(text))
-    )
-
-
-def wait_for_url(driver, expected_url, timeout=DEFAULT_TIMEOUT):
-    """Wait until the browser reaches the expected URL."""
-    return WebDriverWait(driver, timeout).until(
-        EC.url_to_be(expected_url)
-    )    driver.execute_script(
-        "arguments[0].click();",
-        element,
+        EC.text_to_be_present_in_element(
+            locator,
+            str(text),
+        )
     )
 
 
