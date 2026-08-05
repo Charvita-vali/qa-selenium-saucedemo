@@ -10,7 +10,11 @@ def wait_for_visible(driver, locator, timeout=DEFAULT_TIMEOUT):
         EC.visibility_of_element_located(locator)
     )
 
-
+def wait_for_clickable(driver, locator, timeout=DEFAULT_TIMEOUT):
+    return WebDriverWait(driver, timeout).until(
+        EC.element_to_be_clickable(locator)
+    )
+    
 def wait_for_present(driver, locator, timeout=DEFAULT_TIMEOUT):
     return WebDriverWait(driver, timeout).until(
         EC.presence_of_element_located(locator)
