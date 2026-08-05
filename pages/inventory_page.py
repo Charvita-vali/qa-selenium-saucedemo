@@ -103,4 +103,4 @@ class InventoryPage:
         return wait_for_invisible(
             self.driver,
             self.CART_BADGE,
-        )       
+        )
