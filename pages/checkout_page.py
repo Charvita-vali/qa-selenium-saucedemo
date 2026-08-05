@@ -1,46 +1,57 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 
 from config import (
     CHECKOUT_COMPLETE_URL,
     CHECKOUT_STEP_TWO_URL,
 )
-from utils.waits import safe_click, wait_for_url, wait_for_visible
+from utils.waits import (
+    wait_for_clickable,
+    wait_for_url,
+    wait_for_visible,
+)
 
 
 class CheckoutPage:
 
-    FIRST_NAME = (By.ID, "first-name")
-    LAST_NAME = (By.ID, "last-name")
-    POSTAL_CODE = (By.ID, "postal-code")
-    CONTINUE_BUTTON = (By.ID, "continue")
-    FINISH_BUTTON = (By.ID, "finish")
-    ERROR_MESSAGE = (By.CSS_SELECTOR, "[data-test='error']")
-    COMPLETE_HEADER = (By.CLASS_NAME, "complete-header")
+    FIRST_NAME = (
+        By.CSS_SELECTOR,
+        "[data-test='firstName']",
+    )
+    LAST_NAME = (
+        By.CSS_SELECTOR,
+        "[data-test='lastName']",
+    )
+    POSTAL_CODE = (
+        By.CSS_SELECTOR,
+        "[data-test='postalCode']",
+    )
+    CONTINUE_BUTTON = (
+        By.CSS_SELECTOR,
+        "[data-test='continue']",
+    )
+    FINISH_BUTTON = (
+        By.CSS_SELECTOR,
+        "[data-test='finish']",
+    )
+    ERROR_MESSAGE = (
+        By.CSS_SELECTOR,
+        "[data-test='error']",
+    )
+    COMPLETE_HEADER = (
+        By.CSS_SELECTOR,
+        "[data-test='complete-header']",
+    )
 
     def __init__(self, driver):
         self.driver = driver
-        self.wait = WebDriverWait(driver, 15)
 
     def fill_field(self, locator, value):
         field = wait_for_visible(
             self.driver,
             locator,
         )
-
-        field.click()
         field.clear()
-
-        if value:
-            field.send_keys(value)
-
-            self.wait.until(
-                EC.text_to_be_present_in_element_value(
-                    locator,
-                    value,
-                )
-            )
+        field.send_keys(value)
 
     def enter_checkout_information(
         self,
@@ -62,10 +73,10 @@ class CheckoutPage:
         )
 
     def click_continue(self):
-        safe_click(
+        wait_for_clickable(
             self.driver,
             self.CONTINUE_BUTTON,
-        )
+        ).click()
 
     def continue_to_overview(self):
         self.click_continue()
@@ -76,10 +87,10 @@ class CheckoutPage:
         )
 
     def finish_order(self):
-        safe_click(
+        wait_for_clickable(
             self.driver,
             self.FINISH_BUTTON,
-        )
+        ).click()
 
         wait_for_url(
             self.driver,
