@@ -10,31 +10,32 @@ from pages.login_page import LoginPage
 
 @pytest.fixture
 def driver(request):
-    """Start Chrome before each test and close it afterward."""
+    """Create a fresh Chrome session and close it after the test."""
     options = Options()
-    options.add_argument("--headless=new")
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-notifications")
 
     browser = webdriver.Chrome(options=options)
     browser.implicitly_wait(0)
 
     yield browser
 
-    if hasattr(request.node, "rep_call") and request.node.rep_call.failed:
+    report = getattr(request.node, "rep_call", None)
+
+    if report and report.failed:
         os.makedirs("test-results", exist_ok=True)
 
-        screenshot_path = (
+        browser.save_screenshot(
             f"test-results/{request.node.name}.png"
         )
-        source_path = (
-            f"test-results/{request.node.name}.html"
-        )
 
-        browser.save_screenshot(screenshot_path)
-
-        with open(source_path, "w", encoding="utf-8") as file:
+        with open(
+            f"test-results/{request.node.name}.html",
+            "w",
+            encoding="utf-8",
+        ) as file:
             file.write(browser.page_source)
 
         print(f"Failure URL: {browser.current_url}")
@@ -45,7 +46,7 @@ def driver(request):
 
 @pytest.fixture
 def logged_in_driver(driver):
-    """Log in before each test that requires authentication."""
+    """Return a browser already logged into SauceDemo."""
     login_page = LoginPage(driver)
     login_page.open()
     login_page.login(
