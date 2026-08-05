@@ -1,4 +1,6 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 from config import (
     CHECKOUT_COMPLETE_URL,
@@ -19,6 +21,26 @@ class CheckoutPage:
 
     def __init__(self, driver):
         self.driver = driver
+        self.wait = WebDriverWait(driver, 15)
+
+    def fill_field(self, locator, value):
+        field = wait_for_visible(
+            self.driver,
+            locator,
+        )
+
+        field.click()
+        field.clear()
+
+        if value:
+            field.send_keys(value)
+
+            self.wait.until(
+                EC.text_to_be_present_in_element_value(
+                    locator,
+                    value,
+                )
+            )
 
     def enter_checkout_information(
         self,
@@ -26,26 +48,18 @@ class CheckoutPage:
         last_name,
         postal_code,
     ):
-        first_name_field = wait_for_visible(
-            self.driver,
+        self.fill_field(
             self.FIRST_NAME,
+            first_name,
         )
-        first_name_field.clear()
-        first_name_field.send_keys(first_name)
-
-        last_name_field = wait_for_visible(
-            self.driver,
+        self.fill_field(
             self.LAST_NAME,
+            last_name,
         )
-        last_name_field.clear()
-        last_name_field.send_keys(last_name)
-
-        postal_code_field = wait_for_visible(
-            self.driver,
+        self.fill_field(
             self.POSTAL_CODE,
+            postal_code,
         )
-        postal_code_field.clear()
-        postal_code_field.send_keys(postal_code)
 
     def click_continue(self):
         safe_click(
