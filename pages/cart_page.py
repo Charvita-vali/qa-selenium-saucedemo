@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from config import CART_URL, CHECKOUT_STEP_ONE_URL
-from utils.waits import wait_for_clickable, wait_for_url, wait_for_visible
+from utils.waits import safe_click, wait_for_url, wait_for_visible
 
 
 class CartPage:
@@ -16,7 +16,10 @@ class CartPage:
         self.driver = driver
 
     def verify_cart_page(self):
-        return wait_for_url(self.driver, CART_URL)
+        return wait_for_url(
+            self.driver,
+            CART_URL,
+        )
 
     def is_backpack_visible(self):
         return wait_for_visible(
@@ -25,10 +28,10 @@ class CartPage:
         ).is_displayed()
 
     def proceed_to_checkout(self):
-        wait_for_clickable(
+        safe_click(
             self.driver,
             self.CHECKOUT_BUTTON,
-        ).click()
+        )
 
         wait_for_url(
             self.driver,
