@@ -21,17 +21,36 @@ class LoginPage:
     def open(self):
         self.driver.get(BASE_URL)
 
-    def login(self, username, password, expected_url):
-        wait_for_clickable(self.driver, self.USERNAME).send_keys(username)
-        wait_for_clickable(self.driver, self.PASSWORD).send_keys(password)
-        wait_for_clickable(self.driver, self.LOGIN_BUTTON).click()
+    def enter_credentials(self, username, password):
+        username_field = wait_for_visible(
+            self.driver,
+            self.USERNAME,
+        )
+        password_field = wait_for_visible(
+            self.driver,
+            self.PASSWORD,
+        )
 
+        username_field.clear()
+        username_field.send_keys(username)
+
+        password_field.clear()
+        password_field.send_keys(password)
+
+    def click_login(self):
+        wait_for_clickable(
+            self.driver,
+            self.LOGIN_BUTTON,
+        ).click()
+
+    def login(self, username, password, expected_url):
+        self.enter_credentials(username, password)
+        self.click_login()
         wait_for_url(self.driver, expected_url)
 
     def login_without_url_wait(self, username, password):
-        wait_for_clickable(self.driver, self.USERNAME).send_keys(username)
-        wait_for_clickable(self.driver, self.PASSWORD).send_keys(password)
-        wait_for_clickable(self.driver, self.LOGIN_BUTTON).click()
+        self.enter_credentials(username, password)
+        self.click_login()
 
     def get_error_message(self):
         return wait_for_visible(
